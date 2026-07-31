@@ -1,4 +1,4 @@
-Holodori Team Optimizer v1.2.2
+Holodori Team Optimizer v1.3.2
 =================================
 
 Concept, game-rule decisions, testing, and project direction by ace_ks on Discord.
@@ -16,7 +16,7 @@ CONTRIBUTORS
 
 FILES
 -----
-- Holodori_Optimizer_v1.2.2.html: the offline optimizer.
+- Holodori_Optimizer_v1.3.2.html: the offline optimizer.
 - Holodori_Card_Database_HML_SAR.csv: editable/importable 5-star card database.
 
 HOW TO USE
@@ -110,6 +110,20 @@ The optimizer currently includes only 5-star cards. The Stat × Score output is 
 
 CHANGELOG
 ---------
+v1.3.2 — 31 July 2026
+- Replaced the free-text exclusion field with a searchable multi-selection dropdown.
+- Added exact exclusions for entire holomems or individual 5-star cards.
+- Removed fuzzy substring matching from the exclusion filter.
+
+v1.3.1 — 31 July 2026
+- Standardized user-facing numbers to US notation: 1,234.56 rather than 1.234,56.
+- Set the HTML document language to en-US for consistent browser number controls where supported.
+
+v1.3.0 — 31 July 2026
+- Replaced the duration-averaged whole-song SAR multiplier with a temporary-window Active-uplift approximation.
+- SAR now influences team order through duration and combo-biased Special-slot weights.
+- Added a separate SAR uplift output and updated the methodology and CSV export.
+
 v1.2.2 — 31 July 2026
 - Added a prominent max-bloomed, level 80 card assumption and clarified the effect of uneven investment.
 - Added Discord contributors xyzeex and luckyluck.u.
