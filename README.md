@@ -1,4 +1,4 @@
-Holodori Team Optimizer v1.3.2
+Holodori Team Optimizer v1.5.0
 =================================
 
 Concept, game-rule decisions, testing, and project direction by ace_ks on Discord.
@@ -16,16 +16,16 @@ CONTRIBUTORS
 
 FILES
 -----
-- Holodori_Optimizer_v1.3.2.html: the offline optimizer.
+- Holodori_Optimizer_v1.5.0.html: the offline optimizer and team-comparison tool.
 - Holodori_Card_Database_HML_SAR.csv: editable/importable 5-star card database.
 
 HOW TO USE
 ----------
 1. Open the HTML file in a modern browser.
-2. Choose “Find best team for my oshi” or the unrestricted global search.
-3. For a personal result, enable “Use only cards I own” and check your exact card variants.
-4. Select the oshi, Outfit mode, song length, Special model and result count.
-5. Run the optimizer.
+2. Use the Team optimizer tab for oshi, owned-roster, or unrestricted global searches.
+3. Use the Team comparison tab to select two exact ordered five-card teams and one Outfit Skill for each.
+4. Choose whether to compare one run or averages of 3, 5, 10, or 20 runs.
+5. Open Math & methodology for the complete equations and simulation assumptions.
 
 RESPONSIBLE USE AND DISCLAIMER
 ------------------------------
@@ -37,15 +37,29 @@ This optimizer does not currently take into account Holomem Board Bonuses, Memor
 
 Card parameters are modeled as max-bloomed, level 80 5-star cards. Actual in-game values will be lower for cards below that investment level. Relative team comparisons are most meaningful when the compared cards have similar bloom and level investment; uneven investment can change the ranking.
 
+Because Active Skills are probabilistic, teams within about 2% of one another should be treated as practical near-ties for a single run. Normal activation luck can readily reverse their displayed order. Small gaps are more meaningful when comparing averages across multiple runs.
+
 Results are estimates based on incomplete information, simplified formulas, and documented assumptions. Actual in-game performance may differ because of song and chart design, difficulty, account progression, hidden rounding, balance changes, and mechanics that are not fully understood.
 
 Do not use this tool as the sole basis for buying currency, pulling on banners, or making other financial decisions. Gacha outcomes are random and the optimizer cannot guarantee that spending will produce a specific unit or result. Spend only within limits you are comfortable with, and prioritize the characters and playstyles you enjoy.
 
 The tool, creator, contributors, and code-generation provider make no warranties about accuracy, completeness, availability, or fitness for a particular purpose. Users are responsible for their own gameplay and spending decisions. This notice is informational and is not legal or financial advice.
 
+
+TEAM COMPARISON
+---------------
+- Compares two exact ordered five-card teams and explicitly selected Outfit Skills.
+- Displays expected Stat x Score, percentage difference, modeled score components, and 5th-95th percentile ranges.
+- The run selector compares one run or the average of 3, 5, 10, or 20 independent runs per team.
+- It generates 25,000 individual modeled scores per team and 20,000 comparison sets using a stable deterministic seed.
+- The displayed win probability is model-based and is not a p-value.
+- Baseline Active procs are simulated. Direct Specials and the current SAR uplift approximation remain deterministic because exact chart timestamps and SAR-to-check alignment are unavailable.
+- Player accuracy, chart-specific scoring, account progression, hidden mechanics, and uneven card investment are not simulated.
+
 OWNED-CARD SEARCH
 -----------------
-- The selected oshi is automatically included.
+- “Best teams with what I have” has no required oshi and searches every valid five-card team from the selected owned roster.
+- Oshi mode can optionally use the same owned roster; the selected oshi is then automatically included.
 - At least five cards from five different holomems are required.
 - Normal and Summer versions of the same holomem cannot coexist.
 - In “Best outfit from any card” or “Use a specific outfit” mode, an external Outfit card must also be marked as owned.
@@ -102,7 +116,7 @@ Outfit penalty and row gap:
 
 SEARCH LIMITATION
 -----------------
-The browser enumerates every valid composition, but global mode uses a quick-score shortlist before the full exact timing and all 120 orders are applied. This makes the search practical, but the result is not a formal proof of the mathematical global optimum. The full details and shortlist-size equations are documented inside the HTML.
+The browser enumerates every valid composition. Global mode and “Best teams with what I have” use a quick-score shortlist before the full exact timing and all 120 orders are applied. This makes the search practical, but the result is not a formal proof of the mathematical global optimum. The full details and shortlist-size equations are documented inside the HTML.
 
 MODEL SCOPE
 -----------
@@ -110,6 +124,21 @@ The optimizer currently includes only 5-star cards. The Stat × Score output is 
 
 CHANGELOG
 ---------
+v1.5.0 — 31 July 2026
+- Added separate Team optimizer, Team comparison, Math & methodology, and Changelog tabs.
+- Added exact two-team comparison with selected Outfit Skills, expected percentage difference, and modeled component breakdown.
+- Added selectable 1/3/5/10/20-run average simulations, win probability, and score ranges.
+- Added buttons to load the latest rank-1 optimizer result into either comparison team.
+
+v1.4.1 — 31 July 2026
+- Added a proc-variance disclaimer: teams within roughly 2% should be treated as single-run near-ties.
+- Clarified that activation luck can reverse close rankings and that multiple-run averages are more informative.
+
+v1.4.0 — 31 July 2026
+- Added “Best teams with what I have,” which searches the selected owned-card roster without forcing an oshi.
+- Owned-roster mode automatically optimizes all five positions and permits only owned external/specific Outfit cards.
+- Updated search guidance, assumptions and methodology documentation.
+
 v1.3.2 — 31 July 2026
 - Replaced the free-text exclusion field with a searchable multi-selection dropdown.
 - Added exact exclusions for entire holomems or individual 5-star cards.
