@@ -1,4 +1,4 @@
-Holodori Team Optimizer v1.5.0
+Holodori Team Optimizer v1.5.1
 =================================
 
 Concept, game-rule decisions, testing, and project direction by ace_ks on Discord.
@@ -16,7 +16,7 @@ CONTRIBUTORS
 
 FILES
 -----
-- Holodori_Optimizer_v1.5.0.html: the offline optimizer and team-comparison tool.
+- Holodori_Optimizer_v1.5.1.html: the offline optimizer and team-comparison tool.
 - Holodori_Card_Database_HML_SAR.csv: editable/importable 5-star card database.
 
 HOW TO USE
@@ -64,6 +64,13 @@ OWNED-CARD SEARCH
 - Normal and Summer versions of the same holomem cannot coexist.
 - In “Best outfit from any card” or “Use a specific outfit” mode, an external Outfit card must also be marked as owned.
 - The owned roster is stored locally in the browser. It is not uploaded anywhere.
+
+GENERATION CLASS MATCHING
+-------------------------
+- Generation requirements use exact class matching.
+- Gen 1, Gen 2, and Gen 3 are distinct from ID Gen 1, ID Gen 2, and ID Gen 3.
+- A requirement for Gen 3 therefore does not count an ID Gen 3 member, and likewise for Gen 1/2.
+- Multi-class labels such as Gen 1 / GAMERS satisfy either exact class.
 
 DATABASE UPDATES
 ----------------
@@ -124,6 +131,12 @@ The optimizer currently includes only 5-star cards. The Stat × Score output is 
 
 CHANGELOG
 ---------
+v1.5.1 — 1 August 2026
+- Fixed generation eligibility to use exact class matching instead of substring matching.
+- Gen 1/2/3 no longer incorrectly match ID Gen 1/2/3.
+- Gen 1 / GAMERS still correctly matches both Gen 1 and GAMERS.
+- Updated documentation for the corrected generation-class rule.
+
 v1.5.0 — 31 July 2026
 - Added separate Team optimizer, Team comparison, Math & methodology, and Changelog tabs.
 - Added exact two-team comparison with selected Outfit Skills, expected percentage difference, and modeled component breakdown.
