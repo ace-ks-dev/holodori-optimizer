@@ -1,4 +1,4 @@
-Holodori Team Optimizer v1.5.1
+Holodori Team Optimizer v1.5.2
 =================================
 
 Concept, game-rule decisions, testing, and project direction by ace_ks on Discord.
@@ -16,7 +16,7 @@ CONTRIBUTORS
 
 FILES
 -----
-- Holodori_Optimizer_v1.5.1.html: the offline optimizer and team-comparison tool.
+- Holodori_Optimizer_v1.5.2.html: the offline optimizer and team-comparison tool.
 - Holodori_Card_Database_HML_SAR.csv: editable/importable 5-star card database.
 
 HOW TO USE
@@ -69,7 +69,7 @@ GENERATION CLASS MATCHING
 -------------------------
 - Generation requirements use exact class matching.
 - Gen 1, Gen 2, and Gen 3 are distinct from ID Gen 1, ID Gen 2, and ID Gen 3.
-- A requirement for Gen 3 therefore does not count an ID Gen 3 member, and likewise for Gen 1/2.
+- A Gen 3 requirement does not count an ID Gen 3 member, and likewise for Gen 1/2.
 - Multi-class labels such as Gen 1 / GAMERS satisfy either exact class.
 
 DATABASE UPDATES
@@ -131,11 +131,10 @@ The optimizer currently includes only 5-star cards. The Stat × Score output is 
 
 CHANGELOG
 ---------
-v1.5.1 — 1 August 2026
-- Fixed generation eligibility to use exact class matching instead of substring matching.
-- Gen 1/2/3 no longer incorrectly match ID Gen 1/2/3.
-- Gen 1 / GAMERS still correctly matches both Gen 1 and GAMERS.
-- Updated documentation for the corrected generation-class rule.
+v1.5.2 — 1 August 2026
+- Hotfix: repaired the v1.5.1 loading failure caused by a malformed embedded-script build.
+- Retained the exact generation-class matching fix: Gen 1/2/3 no longer match ID Gen 1/2/3.
+- Multi-class labels such as Gen 1 / GAMERS still match either exact class.
 
 v1.5.0 — 31 July 2026
 - Added separate Team optimizer, Team comparison, Math & methodology, and Changelog tabs.
