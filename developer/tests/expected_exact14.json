@@ -1,0 +1,147 @@
+{
+  "poolCardIds": [
+    "card-00012-5-uniq-0062-00",
+    "card-00021-5-uniq-0064-00",
+    "card-00022-5-uniq-0063-00",
+    "card-00026-5-uniq-0065-00",
+    "card-00001-5-uniq-0000-00",
+    "card-00002-5-uniq-0001-00",
+    "card-00004-5-uniq-0005-00",
+    "card-00005-5-uniq-0006-00",
+    "card-00006-5-uniq-0007-00",
+    "card-00007-5-uniq-0008-00",
+    "card-00010-5-uniq-0010-00",
+    "card-00011-5-uniq-0011-00",
+    "card-00013-5-uniq-0002-00",
+    "card-00014-5-uniq-0013-00"
+  ],
+  "params": {
+    "searchMode": "global",
+    "anchor": null,
+    "cardPool": "five",
+    "searchQuality": "fast",
+    "outfitMode": "any",
+    "outfitKey": null,
+    "song": 140,
+    "specialMode": "combo",
+    "other": 0,
+    "topN": 10,
+    "fullOrder": true,
+    "excluded": [],
+    "ownedOnly": false,
+    "ownedKeys": []
+  },
+  "expectedTop10": [
+    {
+      "cardIds": [
+        "card-00006-5-uniq-0007-00",
+        "card-00022-5-uniq-0063-00",
+        "card-00007-5-uniq-0008-00",
+        "card-00010-5-uniq-0010-00",
+        "card-00021-5-uniq-0064-00"
+      ],
+      "score": 536714.1223061075,
+      "outfitCard": "card-00022-5-uniq-0063-00"
+    },
+    {
+      "cardIds": [
+        "card-00007-5-uniq-0008-00",
+        "card-00001-5-uniq-0000-00",
+        "card-00010-5-uniq-0010-00",
+        "card-00006-5-uniq-0007-00",
+        "card-00002-5-uniq-0001-00"
+      ],
+      "score": 535491.432080107,
+      "outfitCard": "card-00002-5-uniq-0001-00"
+    },
+    {
+      "cardIds": [
+        "card-00007-5-uniq-0008-00",
+        "card-00010-5-uniq-0010-00",
+        "card-00006-5-uniq-0007-00",
+        "card-00013-5-uniq-0002-00",
+        "card-00002-5-uniq-0001-00"
+      ],
+      "score": 534475.6640484352,
+      "outfitCard": "card-00002-5-uniq-0001-00"
+    },
+    {
+      "cardIds": [
+        "card-00007-5-uniq-0008-00",
+        "card-00001-5-uniq-0000-00",
+        "card-00012-5-uniq-0062-00",
+        "card-00006-5-uniq-0007-00",
+        "card-00013-5-uniq-0002-00"
+      ],
+      "score": 534284.9575688705,
+      "outfitCard": "card-00001-5-uniq-0000-00"
+    },
+    {
+      "cardIds": [
+        "card-00001-5-uniq-0000-00",
+        "card-00014-5-uniq-0013-00",
+        "card-00007-5-uniq-0008-00",
+        "card-00006-5-uniq-0007-00",
+        "card-00013-5-uniq-0002-00"
+      ],
+      "score": 533783.4119946826,
+      "outfitCard": "card-00001-5-uniq-0000-00"
+    },
+    {
+      "cardIds": [
+        "card-00007-5-uniq-0008-00",
+        "card-00001-5-uniq-0000-00",
+        "card-00010-5-uniq-0010-00",
+        "card-00006-5-uniq-0007-00",
+        "card-00013-5-uniq-0002-00"
+      ],
+      "score": 533152.6327352471,
+      "outfitCard": "card-00001-5-uniq-0000-00"
+    },
+    {
+      "cardIds": [
+        "card-00007-5-uniq-0008-00",
+        "card-00012-5-uniq-0062-00",
+        "card-00006-5-uniq-0007-00",
+        "card-00013-5-uniq-0002-00",
+        "card-00002-5-uniq-0001-00"
+      ],
+      "score": 532495.6328150589,
+      "outfitCard": "card-00006-5-uniq-0007-00"
+    },
+    {
+      "cardIds": [
+        "card-00006-5-uniq-0007-00",
+        "card-00022-5-uniq-0063-00",
+        "card-00007-5-uniq-0008-00",
+        "card-00021-5-uniq-0064-00",
+        "card-00002-5-uniq-0001-00"
+      ],
+      "score": 531837.4854692145,
+      "outfitCard": "card-00022-5-uniq-0063-00"
+    },
+    {
+      "cardIds": [
+        "card-00007-5-uniq-0008-00",
+        "card-00001-5-uniq-0000-00",
+        "card-00006-5-uniq-0007-00",
+        "card-00004-5-uniq-0005-00",
+        "card-00013-5-uniq-0002-00"
+      ],
+      "score": 531715.9628353465,
+      "outfitCard": "card-00001-5-uniq-0000-00"
+    },
+    {
+      "cardIds": [
+        "card-00007-5-uniq-0008-00",
+        "card-00001-5-uniq-0000-00",
+        "card-00006-5-uniq-0007-00",
+        "card-00021-5-uniq-0064-00",
+        "card-00013-5-uniq-0002-00"
+      ],
+      "score": 531468.9389138507,
+      "outfitCard": "card-00001-5-uniq-0000-00"
+    }
+  ],
+  "note": "Expected values come from the v2.0.2 exact exhaustive search on this 14-card pool; v2.1 Fast matched all Top 10."
+}

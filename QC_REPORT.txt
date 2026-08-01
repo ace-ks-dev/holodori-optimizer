@@ -1,0 +1,111 @@
+Holodori Team Optimizer v2.2.0 — Release QC
+===========================================
+Date: 1 August 2026
+Bundled HolodoriDB source version:
+0b8b02c061dd6900cac86860443e3dfea22b8efe5ccc424b3b99a67821acc3be
+
+SUMMARY
+-------
+PASS. v2.2 preserves the v2.1 production search/scoring behavior while introducing an independently tested Python build/data/reference layer.
+
+DATA / NORMALIZATION
+--------------------
+PASS — raw ZIP ingestion of all 20 required HolodoriDB tables.
+PASS — Python normalized snapshot validates at 167 cards:
+       59 x 5★, 54 x 4★, 54 x 3★.
+PASS — all 167/167 cards retain a non-empty assetId.
+PASS — Python v2.2 normalized data, after removing only the intentional schemaVersion/assetId additions, is semantically identical to the v2.1 normalized snapshot for the same source version.
+PASS — raw DB -> Python normalizer -> bundled release snapshot is exact.
+PASS — raw DB -> browser compatibility normalizer vs Python normalizer is exact.
+
+PACKING / RELEASE INTEGRITY
+---------------------------
+PASS — Python pack_master() -> inflate_master() round trip is exact.
+PASS — packed snapshot physically embedded in Holodori_Optimizer_v2.2.0.html inflates exactly to HolodoriDB_Bundled_Normalized_Snapshot.json.
+PASS — release HTML has no unresolved build placeholders.
+PASS — BUILD_MANIFEST.json generated with source version/counts/asset coverage and SHA-256 hashes.
+
+CARD PROGRESSION
+----------------
+PASS — max-progression Python materialization produced all 167 cards with valid P/T/S totals.
+PASS — Python max-progression materialization is semantically identical to the v2.1 167-card materialized model (assetId is the intentional addition).
+PASS — 400 deterministic randomized Level/Bloom materialization cases matched the browser materializeCard() implementation exactly.
+
+REFERENCE SCORING CROSS-CHECK
+-----------------------------
+PASS — Python reference scorer was compared against the production JavaScript worker on 120 deterministic randomized cases.
+
+Cases varied:
+- five distinct Holomems,
+- randomized Level/Bloom progression across the whole card pool,
+- fixed Outfit owner,
+- song lengths 75 / 90 / 120 / 140 / 180 / 240 / 300 s,
+- Specials off / neutral / combo-biased,
+- additional score constants 0 / 2.5 / 7 / 12.25.
+
+Compared numeric fields:
+- score
+- team stat
+- raw Active
+- passive/Outfit support uplift
+- SAR uplift
+- supported Active
+- Active coverage
+- Special bonus
+- total bonus
+- Outfit Support
+
+Maximum absolute floating-point difference observed: approximately 5.82e-11.
+No material scoring disagreement was found.
+
+JAVASCRIPT / SEARCH REGRESSION
+------------------------------
+PASS — node --check on the final HTML inline JavaScript.
+PASS — node --check on the production worker.js.
+
+Exact small-pool baseline:
+- 14 current 5★ cards
+- 2,002 valid distinct-Holomem five-card teams
+- v2.0.2 exhaustive search is the reference
+- v2.2 Fast returned the same Top 10 compositions, scores and Outfit owners
+- ties can have more than one score-equivalent team order
+- observed v2.2 worker runtime in this environment: ~1.8–1.9 s
+
+Full current 5★ v2.1 regression:
+- 4,860,636 raw valid teams
+- v2.2 Fast Top 10 compositions/scores/Outfit owners matched the saved v2.1 Fast regression output
+- observed runtime in this environment: ~10.0 s
+
+LARGE-POOL SCALABILITY STRESS
+-----------------------------
+PASS — all 167 cards, 3★–5★, Fast mode.
+
+Raw valid five-card space:      893,166,556
+Partial candidates evaluated:       734,264
+Complete teams screened:            256,301
+Observed runtime:                    ~24.9 s
+
+The stress run verifies that v2.2 does not enumerate the raw 893-million complete-team space. It does NOT constitute proof that the heuristic search found the mathematical global optimum.
+
+BROWSER-SMOKE NOTE
+------------------
+The container's headless Chromium --dump-dom process does not terminate reliably (including with the background update disabled), so it was not used as a release gate. Browser-specific logic that can be isolated from the DOM is directly executed under Node during QC: browser normalization, packed-snapshot inflation and materialization. The complete final inline script is also syntax-checked.
+
+KNOWN MODEL LIMITATIONS (UNCHANGED)
+-----------------------------------
+- no Holomem Board bonuses
+- no Memory bonuses
+- no Member Power-Up bonuses
+- no Skill Tree Connect/Board score effects
+- no exact chart note-density model
+- no exact Special timestamps
+- SAR-to-Active-check alignment remains approximate
+- documented gameplay-state conditions are assumed satisfied
+- lower-rarity non-scoring secondary effects can be retained as unsupported metadata without adding score
+- Fast/Balanced/Thorough are heuristic search modes, not formal branch-and-bound certificates
+
+FINAL PACKAGED-RELEASE VERIFICATION
+-----------------------------------
+PASS — developer/python/build_release.py was executed from the final package against the raw HolodoriDB ZIP with generatedAtUTC fixed to the release timestamp.
+PASS — the rebuilt standalone HTML, readable normalized snapshot, card asset manifest and BUILD_MANIFEST.json were byte-for-byte identical to the packaged release artifacts (matching SHA-256 hashes).
+PASS — developer/tests/run_qc.py was then executed from the final packaged directory with --raw and --search-regression; all packaged-path tests passed, including the v2.0.2 exact 14-card Top-10 baseline.

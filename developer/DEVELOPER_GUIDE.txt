@@ -1,0 +1,130 @@
+Holodori Optimizer v2.2 Developer Guide
+=======================================
+
+ARCHITECTURE
+------------
+
+  HolodoriDB raw JSON
+          |
+          v
+  Python build/data layer
+    rawio.py
+    normalize.py
+    validate.py
+    pack.py
+    release.py
+          |
+          +--> normalized snapshot JSON
+          +--> card asset manifest
+          +--> packed JSON injected in HTML
+          |
+          v
+  Standalone browser runtime
+    optimizer_template.html
+    worker.js
+          |
+          v
+  HTML optimizer used by the player
+
+A separate Python reference layer mirrors progression/materialization and ordered-team scoring:
+
+  materialize.py
+  reference.py
+
+It is intentionally not the production search runtime. It exists so mechanics can be tested independently of the JavaScript implementation.
+
+WHY KEEP THE SEARCH IN JAVASCRIPT?
+----------------------------------
+The released optimizer stays portable: one HTML file, no local server, no Python environment, no dependency installation. The main scalability gain in v2.1 came from the bounded search algorithm, not from a language change.
+
+Python is used where it gives the biggest maintenance/QC benefit: database transformation, release tooling, asset processing hooks, validation and a second implementation of the score model.
+
+SOURCE LAYOUT
+-------------
+developer/python/build_release.py
+    Main release builder. Accepts --db ZIP/directory or --fetch.
+
+developer/python/update_snapshot.py
+    Lightweight fetch + normalize command for data-only work.
+
+developer/python/holodori_optimizer/rawio.py
+    ZIP/directory/HTTP raw-table loading.
+
+developer/python/holodori_optimizer/normalize.py
+    Canonical raw HolodoriDB -> optimizer schema-v2 conversion.
+
+developer/python/holodori_optimizer/validate.py
+    Snapshot schema/content validation and semantic-diff helper.
+
+developer/python/holodori_optimizer/pack.py
+    Deduplicates level curves/Bloom profiles for compact HTML embedding and can inflate them again.
+
+developer/python/holodori_optimizer/materialize.py
+    Converts normalized card + Level/Bloom into the scoring card used by the worker.
+
+developer/python/holodori_optimizer/reference.py
+    Independent Python implementation of ordered-team scoring: Passives, Active overlap, Score Support, Specials, SAR and Outfit effects.
+
+developer/python/holodori_optimizer/htmlbuild.py
+    Injects worker source, packed snapshot and build metadata into the HTML template.
+
+developer/python/holodori_optimizer/release.py
+    Build metadata, asset manifest and SHA-256 manifest generation.
+
+developer/source/optimizer_template.html
+    Browser UI/runtime source with __WORKER_TEMPLATE__, __BUNDLED_PACKED__ and __BUILD_INFO__ placeholders.
+
+developer/source/worker.js
+    Production optimization/search/scoring Web Worker.
+
+developer/tests/run_qc.py
+    Integrated release QC runner.
+
+DATA UPDATE CONTRACT
+--------------------
+1. Raw tables are loaded.
+2. normalize_master() converts them to schema v2.
+3. validate_master() must pass before a snapshot can be built.
+4. The readable normalized snapshot is written.
+5. pack_master() deduplicates repeated curves/profiles for HTML embedding.
+6. build_html() injects packed data and worker source.
+7. Cross-language QC verifies:
+   - packed HTML data inflates to the readable snapshot,
+   - Python and browser normalizers agree,
+   - Python and browser materialization agree,
+   - Python reference scoring and JS worker scoring agree.
+
+When HolodoriDB introduces an unsupported scoring mechanic, normalization should fail loudly or retain it under an explicitly unsupported field rather than silently inventing behavior.
+
+IMAGE HOOK
+----------
+Schema v2 retains Card.json assetId for every current card and emits HolodoriDB_Card_Asset_Manifest.json.
+
+No image URL policy is hardcoded yet. Future image support should live behind one resolver/provider layer so changing a CDN/path convention does not contaminate scoring or normalization code.
+
+REPRODUCIBLE BUILD EXAMPLE
+--------------------------
+A fixed build timestamp can be supplied:
+
+  python developer/python/build_release.py \
+      --db holodori-db-eng-diff-main.zip \
+      --out rebuilt \
+      --generated-at 2026-08-01T10:00:00Z
+
+With the same raw DB, source template, worker and timestamp, the generated core artifacts are deterministic.
+
+QC MODES
+--------
+Default:
+  python developer/tests/run_qc.py
+
+With a raw DB archive/check-out:
+  python developer/tests/run_qc.py --raw /path/to/db.zip
+
+Plus the v2.0.2 exact 14-card Top-10 baseline:
+  python developer/tests/run_qc.py --raw /path/to/db.zip --search-regression
+
+Plus large all-rarity Fast stress test:
+  python developer/tests/run_qc.py --raw /path/to/db.zip --search-regression --large-search
+
+The large stress test is intended to verify scaling behavior, not prove global optimality.
