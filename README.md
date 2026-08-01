@@ -1,356 +1,96 @@
-# Holodori Team Optimizer
+# Holodori Team Optimizer v3.5.0
 
-**Current stable release: v2.2.0**
+## Start here
 
-A browser-based team optimizer for **Holodori**, built from structured [HolodoriDB](https://holodori.best/) game data.
+Extract the **entire ZIP** into one folder, then open `Holodori_Optimizer_v3.5.0.html` in a modern browser. Keep `Holodori_Chart_Data_r51.js` beside the HTML file.
 
-The optimizer evaluates five-card teams using card progression, Passives, Active Skills, Specials, Skill Activation Rate effects, Outfit Skills, team order, and card-to-card conditions. It supports both personal-roster optimization and large global searches across the available card pool.
+No Python installation, Node.js, local server, game-CDN connection, or manual chart import is required for normal use. If the chart companion is missing, the app fails safely to Generic scoring rather than silently claiming exact chart timing.
 
-The public app remains a standalone HTML/JavaScript application. **Python is not required to use the optimizer.** Starting with v2.2.0, Python is used as the canonical development, data-build, validation, and reference-testing layer.
+## v3.5.0 scoring correction
 
----
+v3.5.0 corrects how **Score Support Effect** is modeled.
 
-## Features
-
-- Optimize a five-card team from your **owned roster**.
-- Search the current **5★ pool** or **all 3★–5★ cards**.
-- Respect the one-card-per-Holomem team restriction.
-- Configure each owned card's **Level** and **Bloom** progression.
-- Model **Performance / Technique / Sense** stat distributions.
-- Model structured **Passive Skill** targets and conditions.
-- Model **Active Skill** probability, interval, duration, conditional magnitude, and overlap.
-- Model **Score Support** effects.
-- Model direct **Special Skill** contribution and Special-position weighting.
-- Approximate **Skill Activation Rate (SAR)** interactions with Active Skills.
-- Optimize **Outfit Skills**, including conditional and external Outfit use.
-- Optimize **team order**.
-- Anchor searches around a chosen card/Holomem.
-- Compare two teams directly.
-- Choose **Fast**, **Balanced**, or **Thorough** global-search effort.
-- Run very large searches without exhaustively enumerating every five-card combination.
-- Save roster settings locally in the browser.
-
----
-
-## Using the optimizer
-
-### GitHub Pages
-
-If this repository is published with GitHub Pages, open the Pages site and use the optimizer directly in your browser.
-
-### Local use
-
-Download `index.html` (or the standalone release HTML) and open it in a modern browser.
-
-No installation, Python environment, Node.js, or local web server is required for normal use.
-
-Your owned-card settings are stored in browser `localStorage`.
-
----
-
-## Search modes
-
-### Fast
-
-Designed for normal use. Uses a relatively narrow candidate frontier and returns strong results quickly.
-
-### Balanced
-
-Searches a larger and more diverse candidate set before exact finalist evaluation.
-
-### Thorough
-
-Uses the broadest candidate frontier and largest finalist set. It is slower, but gives the heuristic search more opportunities to recover unusual synergy-heavy teams.
-
-### Important: "best found" vs. proven optimum
-
-The current global optimizer is a **heuristic best-found search**, not a formal mathematical proof of the global optimum.
-
-The raw all-rarity search space already contains roughly **893 million valid five-card teams** in the current database. Exhaustively evaluating every team, every order, and every Outfit interaction would scale very poorly as more cards are released.
-
-v2.2 therefore preserves the scalable v2.1 search architecture:
-
-1. static card-potential ordering,
-2. incremental partial-team expansion,
-3. global beam plus attribute/group synergy-rescue lanes,
-4. bounded later-depth extension sets,
-5. quick complete-team screening,
-6. local one-card-swap polishing,
-7. representative-order full-model refinement,
-8. exhaustive `5! = 120` order verification for the strongest finalists.
-
-Retained finalists are evaluated with the full implemented scoring model. The heuristic part is deciding which compositions survive to that stage.
-
----
-
-## Scoring model
-
-The optimizer currently models:
-
-- Level/Bloom-dependent card progression
-- Performance
-- Technique
-- Sense
-- Passive stat buffs
-- Passive Score Support
-- attribute/group/generation targeting
-- Top-N Passive recipients
-- Active Skill activation probabilities
-- Active interval and duration
-- conditional Active Score UP
-- overlapping Active Skills
-- direct Special Skill contribution
-- Special-position weighting
-- Skill Activation Rate effects
-- Outfit Skills
-- conditional Outfit triggers
-- external Outfit owners
-- team-order effects
-
-The primary optimization objective is an **Expected Stat × Score index**. It should not be interpreted as an exact prediction of the Unit Score displayed by the game.
-
----
-
-## Current assumptions and exclusions
-
-The following are not yet incorporated into the main optimizer model:
-
-- Holomem Board bonuses
-- Memory bonuses
-- Member Power-Up bonuses
-- Skill Tree Connect/Board scoring effects
-- exact chart note density and note timestamps
-- exact in-game Special timestamps
-- exact SAR-to-Active-check alignment
-- undocumented or hidden scoring mechanics
-
-Gameplay-state conditions such as Combo, LIFE, or judgement thresholds are currently assumed to be satisfied where required by the documented skill.
-
-Some lower-rarity secondary effects may be retained as unsupported metadata without contributing score until their scoring behavior is implemented.
-
----
-
-## Data source
-
-Card and master data are derived from **HolodoriDB / holodori.best**, maintained by **prodeode**, and used with permission.
-
-The v2.2.0 bundled snapshot was built from HolodoriDB source version:
+Special Skills that grant Score Support are **not standalone direct score bonuses**. Passive, Outfit, and concurrently active Special Score Support percentages add together, and that total multiplies the currently effective Active Score UP:
 
 ```text
-0b8b02c061dd6900cac86860443e3dfea22b8efe5ccc424b3b99a67821acc3be
+Supported Active = Active Score UP × (1 + Passive Support + Outfit Support + active Special Support)
 ```
 
-Bundled card counts:
+A Special Score Support window therefore contributes no score when no Active is effective. Skill Activation Rate (SAR) remains separate: it changes Active proc probability only for checks inside the relevant SAR window.
 
-| Rarity | Cards |
-|---|---:|
-| 5★ | 59 |
-| 4★ | 54 |
-| 3★ | 54 |
-| **Total** | **167** |
+Specific Chart mode evaluates the support pool on the actual chart timeline, including exact note-weight segments, Active overlap, Special windows, combo state, and SAR/check alignment. Multiple concurrent Score Support sources add before multiplying the Active.
 
-All 167 current cards retain their Holodori `assetId` in schema v2 for future artwork/image integration.
+This behavior is consistent with observed in-game HUD examples such as a 95% Active receiving approximately +24% from 25% Score Support, and approximately +129% when an additional 110% Special Score Support is concurrently active.
 
----
+## Generic recalibration
 
-## v2.2 architecture
+Because the old Generic calibration had been fitted to the previous direct-Special interpretation, v3.5.0 recalibrates Generic from scratch against all **702 validated non-tutorial r51 charts**.
 
-v2.2 is the first hybrid Python + browser release.
+Fitted Special-position exposure multipliers:
 
 ```text
-HolodoriDB raw data
-        │
-        ▼
-Python build / normalization / validation
-        │
-        ├── normalized card snapshot
-        ├── asset manifest
-        ├── build manifest
-        └── reference scoring / QC
-        │
-        ▼
-Standalone HTML + JavaScript application
-        │
-        ▼
-Web Worker search + scoring engine
+0.894342 / 1.191239 / 1.410406 / 1.516521 / 1.062967
 ```
 
-### Browser layer
+Internal Generic-vs-Specific-Chart validation on 30 mechanically varied teams × 702 charts (21,060 team/chart cases):
 
-The browser application handles:
+- mean absolute deviation: **2.90%**
+- mean bias: **−0.12%**
+- chart-level median average deviation: **2.65%**
+- chart-level 95th percentile average deviation: **4.96%**
+- largest individual case in that sample: **15.46%**
 
-- user interface,
-- roster management,
-- local storage,
-- team comparison,
-- production scoring,
-- scalable team search.
+A separate fit on 20 teams evaluated on a held-out 10-team subset produced **2.86%** mean absolute deviation and **+0.35%** mean bias.
 
-### Python layer
+These are comparisons against the optimizer's own corrected exact-chart model, **not measured live-game score error**. Use Specific Chart whenever the song/difficulty is known.
 
-The Python tooling handles:
+## Production chart scoring
 
-- reading a HolodoriDB repository ZIP or directory,
-- joining relational master-data tables,
-- normalization into the optimizer card model,
-- schema/content validation,
-- card progression materialization,
-- snapshot packing,
-- release manifests and SHA-256 hashes,
-- card `assetId` preservation,
-- independent reference scoring,
-- Python ↔ JavaScript regression testing.
+The release ships **702 validated live revision-51 Perfect-FC timelines**, representing **405,194 scoring notes** and **3,510 chart-defined Special trigger timestamps**.
 
-The Python toolchain uses only the Python standard library.
+From the current 708 song+difficulty metadata rows:
 
----
+- 702 non-tutorial rows have validated exact timelines.
+- `Rebellion · Normal` (`m0158:2`) is unavailable because its SUS resource is absent from live r51.
+- `save our hearts · Easy` (`m0161:1`) is unavailable for the same reason.
+- four `m9999` tutorial difficulties are not used because their charts expose two Skill/Special triggers instead of the five-slot normal-live model.
 
-## Repository layout
+## Comparison Board timing
 
-A typical v2.2 repository looks like:
+Comparison optionally models per-member Holomem Board Active Skill activation frequency at **0 / +4 / +8 / +12%** using:
 
 ```text
-.
-├── index.html
-├── HolodoriDB_Bundled_Normalized_Snapshot.json
-├── HolodoriDB_Card_Asset_Manifest.json
-├── BUILD_MANIFEST.json
-├── README.md
-├── QC_REPORT.txt
-└── developer/
-    ├── DEVELOPER_GUIDE.txt
-    ├── python/
-    │   ├── build_release.py
-    │   ├── update_snapshot.py
-    │   └── holodori_optimizer/
-    ├── source/
-    │   ├── optimizer_template.html
-    │   └── worker.js
-    └── tests/
+effective interval = base interval / (1 + frequency bonus)
 ```
 
----
+This is based on gameplay timing evidence, including a 35 s Active matching a 31.25 s grid at +12%. Optimizer search remains Board-neutral.
 
-## Developer quick start
+## Search behavior
 
-### Rebuild from a downloaded HolodoriDB ZIP or checkout
+The all-rarity distinct-Holomem space contains **893,166,556** valid five-card compositions before order. Global optimization therefore uses bounded beam search, structured synergy/diversity rescue, local swap polish, exact finalist refinement, and exhaustive 5! order verification for retained finalists. **Balanced** is the recommended default.
 
-```bash
-python developer/python/build_release.py \
-  --db /path/to/holodori-db-eng-diff-main.zip \
-  --out rebuilt
-```
+Search is best-found heuristic rather than a formal proof of the global optimum. v3.5 QC includes a tractable exhaustive regression where production Balanced search reproduced the literal Top 10 with zero score drift in both Generic and Specific Chart modes.
 
-### Fetch the public raw tables and rebuild
+## Deliberate exclusions
 
-```bash
-python developer/python/build_release.py --fetch --out rebuilt
-```
+Optimizer search still excludes Holomem Board bonuses, Memories, Member Power-Up, other Skill Tree/Board score effects, Fever/multiplayer mechanics, player judgement errors, and undocumented account/game constants. Comparison can optionally model only the experimentally supported Board Active-frequency nodes.
 
-### Run normal QC
+The output is an **expected comparative index**, not the game's literal displayed score.
 
-```bash
-python developer/tests/run_qc.py
-```
+## Files
 
-### Include raw-normalizer and exact-subset regression checks
+- `Holodori_Optimizer_v3.5.0.html` — browser application and normalized card/master metadata.
+- `Holodori_Chart_Data_r51.js` — compact lossless exact-chart companion, decoded lazily.
+- `CHART_DATA_GUIDE.md` — chart format/provenance notes.
+- `GAME_VALIDATION_PLAN.md` — recommended empirical validation protocol and current evidence.
+- `QC_REPORT.txt` — release diagnostics.
+- `RELEASE_MANIFEST.json` — release hashes/version boundaries.
+- `LEGAL_NOTICE.md` — attribution/legal notice.
 
-```bash
-python developer/tests/run_qc.py \
-  --raw /path/to/holodori-db-eng-diff-main.zip \
-  --search-regression
-```
+## Artwork and network behavior
 
-### Include the large all-rarity search stress test
+Card portraits and song jackets may be requested from `api.holodori.best`. Artwork is presentation-only and never changes scoring. Exact chart data is local; the browser does not fetch/decrypt game chart resources at runtime. No analytics are included.
 
-```bash
-python developer/tests/run_qc.py \
-  --raw /path/to/holodori-db-eng-diff-main.zip \
-  --search-regression \
-  --large-search
-```
+## Attribution
 
-Node.js is optional for building the release, but is used for cross-language JavaScript QC when available.
-
-See `developer/DEVELOPER_GUIDE.txt` for additional architecture details.
-
----
-
-## Quality control
-
-v2.2 introduced an independent Python reference implementation specifically to reduce the risk of silently changing the scoring model while the browser optimizer evolves.
-
-Release QC includes:
-
-- raw HolodoriDB normalization checks,
-- Python ↔ JavaScript normalized-data comparison,
-- randomized Level/Bloom materialization comparison,
-- randomized ordered-team scoring comparison,
-- exact small-pool search regression against the earlier exhaustive optimizer,
-- full 5★ regression,
-- all-rarity scalability testing,
-- external/fixed Outfit tests,
-- owned-roster tests,
-- anchored-card tests,
-- Team Comparison tests,
-- final JavaScript syntax checks,
-- release/package integrity checks,
-- reproducible-build verification.
-
-The v2.2 release artifacts can be rebuilt from the packaged developer tooling and HolodoriDB source data.
-
----
-
-## Card images
-
-v2.2 lays the groundwork for future card artwork support without coupling images to the scoring engine.
-
-Each normalized card retains its source `assetId`, and the release includes:
-
-```text
-HolodoriDB_Card_Asset_Manifest.json
-```
-
-The intended architecture is for artwork to remain a presentation-layer feature. Failure to load an image should never affect optimization or scoring.
-
----
-
-## Changelog
-
-### v2.2.0 — 1 August 2026
-
-- Introduced the hybrid Python + standalone-browser architecture.
-- Added a zero-dependency Python normalization, validation, packing, and release-build pipeline.
-- Added a Python reference materializer and ordered-team scorer.
-- Added Python ↔ JavaScript normalization/materialization/scoring regression tests.
-- Added `BUILD_MANIFEST.json` with release hashes and build metadata.
-- Added `HolodoriDB_Card_Asset_Manifest.json`.
-- Added `assetId` to schema v2 for future image support.
-- Preserved the scalable v2.1 search and scoring behavior.
-
-### v2.1.x — development milestone
-
-- Replaced exhaustive complete-team enumeration with scalable bounded search.
-- Added all-rarity optimization.
-- Added Fast / Balanced / Thorough effort modes.
-- Added local team polishing and improved finalist/order evaluation.
-- Added search-space instrumentation.
-
-### v2.0.x — development milestone
-
-- Rebuilt card mechanics around normalized HolodoriDB master data.
-- Added structured Passives, Active Skills, Specials, SAR, and Outfit Skills.
-- Added external Outfit optimization.
-- Added Level/Bloom progression support.
-
-### v1.5.2
-
-Previous public stable release.
-
----
-
-## Disclaimer
-
-This is a fan-made optimization tool. Game mechanics may change, database interpretations may be incomplete, and undocumented in-game behavior may differ from the implemented model.
-
-Results should therefore be treated as analytical recommendations under the documented optimizer assumptions rather than authoritative in-game guarantees.
+This is an unofficial fan-made analytical tool and is not affiliated with or endorsed by COVER Corp., hololive production, QualiArts, Inc., the hololive Dreams game team, or HolodoriDB. See `LEGAL_NOTICE.md` and the in-app Disclaimers tab.
