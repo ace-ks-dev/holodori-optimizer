@@ -6,13 +6,13 @@ A browser-based team optimizer for **hololive Dreams**. Import your roster from 
 
 ## Current release
 
-**v3.8.13**
+**v3.8.15**
 
 The easiest way to use the optimizer is to download the release package, keep the HTML and chart-data file together, and open the HTML in a modern desktop browser.
 
 If you are using this repository directly:
 
-1. Open `dist/Holodori_Optimizer_v3.8.13.html`.
+1. Open `dist/Holodori_Optimizer_v3.8.15.html`.
 2. Keep `dist/Holodori_Chart_Data_r51.js` in the same folder if you want **Choose a song** scoring.
 3. Import roster screenshots or edit your roster manually.
 
@@ -67,7 +67,7 @@ The repository includes a root `index.html` that opens the current build in `dis
 The project deliberately avoids a JavaScript build ecosystem. The release HTML is generated with Python's standard library:
 
 ```bash
-python build.py dist/Holodori_Optimizer_v3.8.13.html
+python build.py dist/Holodori_Optimizer_v3.8.15.html
 ```
 
 The build is deterministic. The expected SHA-256 for the current HTML is recorded in `RELEASE_TARGET_SHA256.txt`.

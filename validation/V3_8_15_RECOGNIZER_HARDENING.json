@@ -1,0 +1,79 @@
+{
+  "version": "3.8.15",
+  "recognizerVersion": "1.0.5",
+  "feature": "scale-independent roster geometry hardening",
+  "changes": [
+    "dual geometry hypotheses: edge-lattice-v2 plus legacy color-lattice fallback",
+    "card pitch inferred from repeated frame-edge structure rather than colored-component size",
+    "attribute color used to lock lattice phase rather than decide scale",
+    "empty/background slots require supported columns plus occupancy/rarity evidence",
+    "dedupe never merges two slots from the same screenshot",
+    "successful complete Apply closes importer and returns to Best Team"
+  ],
+  "status": "PASS",
+  "integratedBrowserRegression": {
+    "regloss_776x367": {
+      "cards": 3,
+      "resolved": 3,
+      "levels": [
+        20,
+        20,
+        20
+      ]
+    },
+    "regloss_1334x390": {
+      "cards": 3,
+      "resolved": 3,
+      "levels": [
+        20,
+        20,
+        20
+      ]
+    },
+    "aspect_2048x989": {
+      "cards": 15,
+      "resolved": 10,
+      "note": "five bottom-edge cards are genuinely clipped and held for review; all 10 visible Levels exact"
+    },
+    "aspect_1746x1157": {
+      "cards": 17,
+      "resolved": 15,
+      "note": "15 full cards resolved; 2 boundary-clipped cards retained separately for review"
+    },
+    "aspect_1905x1310": {
+      "cards": 15,
+      "resolved": 15,
+      "note": "all visible Levels exact"
+    },
+    "aspect_2048x862": {
+      "cards": 18,
+      "resolved": 18,
+      "note": "all detected identities resolved"
+    },
+    "validated_mobile_2048x944": {
+      "cards": 18,
+      "resolved": 18,
+      "note": "six bottom-clipped Levels correctly held for review"
+    },
+    "previous_crop_1176x655": {
+      "cards": 10,
+      "resolved": 10,
+      "levels": [
+        40,
+        40,
+        32,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30
+      ]
+    }
+  },
+  "applyUx": {
+    "completeApply": "closes modal, activates Best Team, updates roster summary and confirmation",
+    "partialApply": "keeps review modal open"
+  }
+}

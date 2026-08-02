@@ -1,5 +1,5 @@
 {
-  "appVersion": "3.8.13",
+  "appVersion": "3.8.15",
   "scoringModelVersion": "PFC-v3.5.0+board-frequency-v1",
   "cardDataSchemaVersion": "normalized-card-v2",
   "chartPackSchemaVersion": "packed-chart-v1",
@@ -7,8 +7,8 @@
   "holodoriSourceVersion": "0b8b02c061dd6900cac86860443e3dfea22b8efe5ccc424b3b99a67821acc3be",
   "chartTimelineCount": 702,
   "chartNoteCount": 405194,
-  "rosterImporterVersion": "1.1.0",
+  "rosterImporterVersion": "1.0.5",
   "rosterRecognitionRegistryCards": 167,
-  "rosterRecognitionBackend": "dense-browser-v1.1-mobile",
-  "rosterRecognizerVersion": "1.0.2"
+  "rosterRecognitionBackend": "dense-browser-v1.2-edge-lattice-hardened",
+  "rosterRecognizerVersion": "1.0.5"
 }
