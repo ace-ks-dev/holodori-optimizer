@@ -1,0 +1,14 @@
+{
+  "release": "3.8.5",
+  "scope": "terminology-only UI consistency",
+  "canonicalTerms": {
+    "generic": "Any song",
+    "chart": "Choose a song",
+    "scoringModeLabel": "Song",
+    "outfitSkill": "Outfit"
+  },
+  "behaviorChanges": false,
+  "scoringModelChanged": false,
+  "searchWorkerChanged": false,
+  "recognizerChanged": false
+}

@@ -1,0 +1,10 @@
+{
+  "version": "3.8.4",
+  "feature": "Oshi-aware Best next card",
+  "expected": {
+    "anyTeam": "baseline and candidates remain unrestricted except existing roster/card constraints",
+    "withOshi": "selected owned Oshi card is required in baseline and every candidate team",
+    "candidateProgression": "max Level / Bloom 0",
+    "sameMemberCandidate": "excluded because a five-card team cannot contain two cards from the same Holomem"
+  }
+}

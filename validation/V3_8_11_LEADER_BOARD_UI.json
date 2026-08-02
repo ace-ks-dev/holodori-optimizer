@@ -1,0 +1,13 @@
+{
+  "version": "3.8.11",
+  "feature": "Leader Holomem Board result labeling",
+  "rules": {
+    "leader_identity": "team card characterId matches selected Outfit owner characterId",
+    "leader_display": [
+      "Leader Holomem Board",
+      "Member nodes N/A"
+    ],
+    "nonleader_zero_display": "Frequency Up nodes with three empty circles",
+    "scoring_changed": false
+  }
+}

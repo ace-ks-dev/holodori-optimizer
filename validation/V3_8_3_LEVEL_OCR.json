@@ -1,0 +1,27 @@
+{
+  "version": "3.8.3",
+  "recognizerVersion": "1.0.2",
+  "issue": "mobile Lv70 misread as Lv50",
+  "fix": [
+    "added 2 mobile/downscaled level-7 prototypes",
+    "digit margin now compares distinct digit classes"
+  ],
+  "expected": {
+    "Towa mobile old": 70,
+    "Towa mobile new": 70
+  },
+  "regressions": {
+    "original31 progression": "31/31 Level + Bloom exact",
+    "new_validation_4star": "18/18 identity; all visible Levels/Blooms exact; 6 bottom-clipped Levels intentionally unknown",
+    "new_validation_3star": "18/18 identity; all visible Levels/Blooms exact; 6 bottom-clipped Levels intentionally unknown",
+    "mobile old Towa": "Lv70 / Bloom 1 exact",
+    "mobile new Towa": "Lv70 / Bloom 1 exact"
+  },
+  "browserTimingsSeconds": {
+    "original": 0.77,
+    "new4": 0.58,
+    "new3": 0.41,
+    "mobold": 0.61,
+    "mobnew": 0.37
+  }
+}

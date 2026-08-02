@@ -1,0 +1,85 @@
+/* Holodori roster screenshot importer v1.0.1.
+   Browser-only module. The optimizer scoring/search worker is intentionally separate. */
+const ROSTER_IMPORTER_VERSION='1.0.2';
+const ROSTER_RECOGNIZER_WORKER_SOURCE=__ROSTER_RECOGNIZER_WORKER_JSON__;
+const ROSTER_CARDS_TEXT=__ROSTER_CARDS_TEXT_JSON__;
+const ROSTER_REFERENCES_TEXT=__ROSTER_REFERENCES_TEXT_JSON__;
+const ROSTER_DIGITS_TEXT=__ROSTER_DIGITS_TEXT_JSON__;
+let ROSTER_ENGINE=null,ROSTER_ENGINE_READY=null,ROSTER_PENDING=null,ROSTER_LAST_REVIEW=null;
+
+function rosterEscape(v){return escapeHtml(String(v??''));}
+function rosterCardLabel(c){return `${stars(c.rarity)} ${c.member} — ${c.name}`;}
+function rosterMasterCard(id){return MASTER_CARD_BY_ID.get(id)||null;}
+function rosterCandidateCards(){return [...MASTER_DB.cards].sort((a,b)=>b.rarity-a.rarity||a.member.localeCompare(b.member,'en-US')||a.name.localeCompare(b.name,'en-US'));}
+function rosterEngineData(){
+  if(rosterEngineData.cache)return rosterEngineData.cache;
+  rosterEngineData.cache={cards:JSON.parse(ROSTER_CARDS_TEXT),refs:JSON.parse(ROSTER_REFERENCES_TEXT),digits:JSON.parse(ROSTER_DIGITS_TEXT)};
+  return rosterEngineData.cache;
+}
+function rosterTerminateEngine(){if(ROSTER_ENGINE){try{ROSTER_ENGINE.terminate();}catch(_){}ROSTER_ENGINE=null;ROSTER_ENGINE_READY=null;ROSTER_PENDING=null;}}
+function rosterEnsureEngine(){
+  if(ROSTER_ENGINE_READY)return ROSTER_ENGINE_READY;
+  const url=URL.createObjectURL(new Blob([ROSTER_RECOGNIZER_WORKER_SOURCE],{type:'text/javascript'})),w=new Worker(url);URL.revokeObjectURL(url);ROSTER_ENGINE=w;
+  ROSTER_ENGINE_READY=new Promise((resolve,reject)=>{
+    const onInit=e=>{const m=e.data||{};if(m.type==='ready'){resolve(m);}else if(m.type==='error'){reject(new Error(m.message||'Roster recognizer failed to initialize.'));}};
+    w.addEventListener('message',onInit);
+    w.addEventListener('error',e=>reject(new Error(e.message||'Roster recognizer worker failed.')),{once:true});
+    const d=rosterEngineData();w.postMessage({type:'init',cards:d.cards,refs:d.refs,digits:d.digits});
+  });
+  w.addEventListener('message',e=>{const m=e.data||{};if(m.type==='progress'){rosterSetStatus(`${m.phase||'Recognizing'}…`);}else if(m.type==='result'&&ROSTER_PENDING){const p=ROSTER_PENDING;ROSTER_PENDING=null;p.resolve(m.result);}else if(m.type==='error'&&ROSTER_PENDING){const p=ROSTER_PENDING;ROSTER_PENDING=null;p.reject(new Error(m.message||'Roster recognition failed.'));}});
+  return ROSTER_ENGINE_READY;
+}
+async function recognizeRoster(files){
+  if(!files?.length)throw new Error('Choose at least one roster screenshot.');
+  const ready=await rosterEnsureEngine();if(!ready.indexFresh)throw new Error(`Recognition index is incomplete (${ready.referenceCount}/${ready.registryCount} cards).`);
+  const embedded=new Set(rosterEngineData().cards.map(c=>c.id)),current=MASTER_DB.cards.filter(c=>c.rarity>=3&&c.rarity<=5).map(c=>c.id),missing=current.filter(id=>!embedded.has(id));if(missing.length||current.length!==embedded.size)throw new Error(`Roster recognition data is older than the current optimizer card database (${embedded.size} indexed vs ${current.length} current cards). Refresh the recognizer data before importing screenshots.`);
+  if(ROSTER_PENDING)throw new Error('A roster import is already running.');
+  const images=[],transfer=[];for(let i=0;i<files.length;i++){const f=files[i],bitmap=await createImageBitmap(f),name=`${String(i+1).padStart(2,'0')} · ${f.name}`;images.push({name,bitmap});transfer.push(bitmap);}
+  return await new Promise((resolve,reject)=>{ROSTER_PENDING={resolve,reject};ROSTER_ENGINE.postMessage({type:'recognize',images},transfer);});
+}
+function rosterEnsureModal(){
+  let modal=$('rosterimportmodal');if(modal)return modal;
+  modal=document.createElement('div');modal.id='rosterimportmodal';modal.className='roster-modal';modal.setAttribute('aria-hidden','true');
+  modal.innerHTML=`<div class="roster-dialog" role="dialog" aria-modal="true" aria-labelledby="roster-title"><div class="roster-dialog-head"><div><div class="brand-kicker">Screenshot importer · v${ROSTER_IMPORTER_VERSION}</div><h2 id="roster-title">Review detected roster</h2></div><button class="roster-close" id="rosterclose" type="button" aria-label="Close">×</button></div><div class="roster-status" id="rosterstatus">Choose roster screenshots to begin.</div><div class="roster-options"><label><input id="rosterassumemax" type="checkbox" checked> Ignore screenshot Levels and use each card's max Level <span>(Lv80 for 5★)</span></label><small>Bloom is still read from the screenshot and remains editable.</small></div><div class="roster-summary" id="rostersummary"></div><div class="roster-review" id="rosterreview"></div><div class="roster-actions"><label class="roster-clear"><input id="rosterclearfirst" type="checkbox"> Clear current owned roster before applying</label><span class="roster-spacer"></span><button id="rosterjson" type="button" disabled>Export reviewed JSON</button><button id="rosterapply" class="primary" type="button" disabled>Apply complete cards</button></div><p class="tiny roster-foot">Recognition runs locally in this browser. Unresolved identities/Bloom values are never applied automatically; max-Level mode intentionally ignores Level OCR.</p></div>`;
+  document.body.appendChild(modal);$('rosterclose').onclick=rosterCloseModal;modal.addEventListener('click',e=>{if(e.target===modal)rosterCloseModal();});$('rosterapply').onclick=rosterApplyReviewed;$('rosterjson').onclick=rosterExportReviewed;$('rosterassumemax').addEventListener('change',rosterApplyLevelMode);return modal;
+}
+function rosterOpenModal(){const m=rosterEnsureModal();m.classList.add('open');m.setAttribute('aria-hidden','false');document.body.classList.add('roster-modal-open');}
+function rosterCloseModal(){const m=$('rosterimportmodal');if(m){m.classList.remove('open');m.setAttribute('aria-hidden','true');}document.body.classList.remove('roster-modal-open');}
+function rosterSetStatus(text,bad=false){const e=$('rosterstatus');if(e){e.textContent=text;e.classList.toggle('bad',Boolean(bad));}}
+function rosterConfidenceText(v){const n=Number(v);return Number.isFinite(n)&&n>0?`${Math.round(n*100)}%`:'review';}
+function rosterCurrentRows(){return [...document.querySelectorAll('.roster-row')];}
+function rosterRowValue(row){const cardId=row.querySelector('.roster-card-select').value||null,bloomRaw=row.querySelector('.roster-bloom').value,bloom=bloomRaw===''?null:Number(bloomRaw),c=cardId?rosterMasterCard(cardId):null,assumeMax=Boolean($('rosterassumemax')?.checked),rawLevel=Number(row.querySelector('.roster-level').value),level=assumeMax&&c?c.maxLevel:rawLevel;return{cardId,level:c&&Number.isFinite(level)&&level>=1&&level<=c.maxLevel?Math.round(level):null,bloom:Number.isInteger(bloom)&&bloom>=0&&bloom<=5?bloom:null};}
+function rosterApplyLevelMode(){
+  const assume=Boolean($('rosterassumemax')?.checked);for(const row of rosterCurrentRows()){const sel=row.querySelector('.roster-card-select'),lev=row.querySelector('.roster-level'),note=row.querySelector('.roster-level-note'),c=rosterMasterCard(sel?.value);if(!lev)continue;lev.disabled=assume;if(assume){lev.value=c?c.maxLevel:'';if(note)note.textContent='Lv assumed max';}else{const detected=row.dataset.detectedLevel||'';lev.value=detected;if(c&&lev.value&&Number(lev.value)>c.maxLevel)lev.value=c.maxLevel;if(note)note.textContent=`Lv ${row.dataset.levelConfidence||'review'}`;}}
+  rosterUpdateReviewSummary();
+}
+function rosterUpdateReviewSummary(){
+  const rows=rosterCurrentRows(),complete=rows.filter(r=>{const v=rosterRowValue(r);return v.cardId&&v.level!=null&&v.bloom!=null;}).length,identity=rows.filter(r=>rosterRowValue(r).cardId).length,needs=rows.length-complete;
+  $('rostersummary').innerHTML=`<span class="roster-chip good">${rows.length} unique cards</span><span class="roster-chip">${identity} identities resolved</span><span class="roster-chip ${needs?'warn':'good'}">${needs?`${needs} need review`:'all progression complete'}</span>`;
+  $('rosterapply').disabled=complete===0;$('rosterapply').textContent=needs?`Apply ${complete} complete card${complete===1?'':'s'}`:`Apply all ${complete} cards`;$('rosterjson').disabled=!rows.length;
+}
+async function rosterCropDataUrl(file,box){
+  try{const bm=await createImageBitmap(file),[x,y,w,h]=box||[0,0,bm.width,bm.height],sx=Math.max(0,x),sy=Math.max(0,y),ex=Math.min(bm.width,x+w),ey=Math.min(bm.height,y+h),c=document.createElement('canvas');c.width=92;c.height=134;const ctx=c.getContext('2d');ctx.fillStyle='#0a1020';ctx.fillRect(0,0,c.width,c.height);if(ex>sx&&ey>sy){const dx=(sx-x)/w*c.width,dy=(sy-y)/h*c.height,dw=(ex-sx)/w*c.width,dh=(ey-sy)/h*c.height;ctx.drawImage(bm,sx,sy,ex-sx,ey-sy,dx,dy,dw,dh);}bm.close?.();return c.toDataURL('image/jpeg',.82);}catch(_){return'';}
+}
+function rosterSelectOptions(current){const cards=rosterCandidateCards();return `<option value="">— Needs review —</option>${cards.map(c=>`<option value="${rosterEscape(c.id)}"${c.id===current?' selected':''}>${rosterEscape(rosterCardLabel(c))}</option>`).join('')}`;}
+async function rosterRenderReview(result,files,fileNames){
+  ROSTER_LAST_REVIEW={result,files,fileNames};const review=$('rosterreview');review.innerHTML='';const instances=result.diagnostics?.instancesDetail||[],fileByName=new Map(fileNames.map((n,i)=>[n,files[i]]));
+  const rows=[];for(let i=0;i<result.cards.length;i++){const card=result.cards[i],instIndex=card.evidence?.instances?.[0],inst=Number.isInteger(instIndex)?instances[instIndex]:null,row=document.createElement('div');row.className='roster-row';row.dataset.index=String(i);row.dataset.detectedLevel=card.level??'';row.dataset.levelConfidence=rosterConfidenceText(card.levelConfidence);
+    const alt=(card.evidence?.alternatives||[]).slice(0,3).map(a=>{const c=rosterMasterCard(a.card_id);return c?`${c.member} — ${c.name} (${Math.round((a.score||0)*100)})`:a.card_id;}).join(' · '),warn=(card.warnings||[]).join(' · ');
+    row.innerHTML=`<div class="roster-crop"><div class="roster-crop-ph">crop</div></div><div class="roster-match"><label>Card<select class="roster-card-select">${rosterSelectOptions(card.cardId)}</select></label><div class="roster-meta"><span>Identity ${rosterConfidenceText(card.identityConfidence)}</span>${inst?`<span>${rosterEscape(inst.screenshot)} · col ${inst.column}</span>`:''}</div>${alt?`<div class="roster-alt">Alternatives: ${rosterEscape(alt)}</div>`:''}${warn?`<div class="roster-warning">${rosterEscape(warn)}</div>`:''}</div><div class="roster-prog"><label>Level<input class="roster-level" type="number" min="1" max="100" value="${card.level??''}" placeholder="?"></label><label>Bloom<select class="roster-bloom"><option value=""${card.bloom==null?' selected':''}>?</option>${[0,1,2,3,4,5].map(b=>`<option value="${b}"${card.bloom===b?' selected':''}>${b}</option>`).join('')}</select></label><small><span class="roster-level-note">Lv ${rosterConfidenceText(card.levelConfidence)}</span> · Bloom ${rosterConfidenceText(card.bloomConfidence)}</small></div>`;
+    review.appendChild(row);rows.push({row,inst});
+    const sel=row.querySelector('.roster-card-select'),lev=row.querySelector('.roster-level');sel.addEventListener('change',()=>{const c=rosterMasterCard(sel.value);lev.max=c?.maxLevel||100;if($('rosterassumemax')?.checked)lev.value=c?.maxLevel??'';else if(c&&lev.value&&Number(lev.value)>c.maxLevel)lev.value=c.maxLevel;rosterUpdateReviewSummary();});lev.addEventListener('input',rosterUpdateReviewSummary);row.querySelector('.roster-bloom').addEventListener('change',rosterUpdateReviewSummary);
+  }
+  rosterApplyLevelMode();
+  for(const x of rows){if(!x.inst)continue;const f=fileByName.get(x.inst.screenshot);if(!f)continue;const url=await rosterCropDataUrl(f,x.inst.cardBox);if(url){const img=document.createElement('img');img.src=url;img.alt='Detected card crop';x.row.querySelector('.roster-crop').replaceChildren(img);}}
+}
+function rosterReviewedPayload(){
+  const base=ROSTER_LAST_REVIEW?.result;if(!base)return null;const cards=rosterCurrentRows().map((row,i)=>{const v=rosterRowValue(row),orig=base.cards[i]||{};return{...orig,cardId:v.cardId,member:v.cardId?rosterMasterCard(v.cardId)?.member??null:null,name:v.cardId?rosterMasterCard(v.cardId)?.name??null:null,rarity:v.cardId?rosterMasterCard(v.cardId)?.rarity??orig.rarity:orig.rarity,level:v.level,bloom:v.bloom,reviewed:true};});return{...base,reviewedAt:new Date().toISOString(),cards};
+}
+function rosterApplyReviewed(){const payload=rosterReviewedPayload();if(!payload)return;const complete=payload.cards.filter(c=>c.cardId&&c.level!=null&&c.bloom!=null);if($('rosterclearfirst').checked)for(const c of MASTER_DB.cards)setOwnedEntry(c.id,{owned:false});for(const c of complete)setOwnedEntry(c.cardId,{owned:true,level:c.level,bloom:c.bloom});saveOwnedProgress();renderOwnedCards();if(typeof updateQuickRosterSummary==='function')updateQuickRosterSummary();if(typeof renderOshiPicker==='function')renderOshiPicker();rosterSetStatus(`Applied ${complete.length} complete card${complete.length===1?'':'s'} to your owned roster.`);$('rosterclearfirst').checked=false;}
+function rosterExportReviewed(){const payload=rosterReviewedPayload();if(!payload)return;const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`holodori_roster_reviewed_${new Date().toISOString().slice(0,10)}.json`;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},0);}
+async function rosterImportFiles(fileList){
+  const files=[...fileList].filter(f=>/^image\//i.test(f.type));if(!files.length){alert('Choose PNG, JPEG, or WebP roster screenshots.');return;}rosterOpenModal();$('rosterreview').innerHTML='';$('rostersummary').innerHTML='';$('rosterapply').disabled=true;$('rosterjson').disabled=true;rosterSetStatus(`Loading recognizer and ${files.length} screenshot${files.length===1?'':'s'}…`);
+  try{const names=files.map((f,i)=>`${String(i+1).padStart(2,'0')} · ${f.name}`),t=performance.now(),result=await recognizeRoster(files);rosterSetStatus(`Recognition complete in ${((performance.now()-t)/1000).toFixed(1)} s. Review anything marked uncertain before applying.`);await rosterRenderReview(result,files,names);}catch(err){console.error(err);rosterSetStatus(err.message||String(err),true);}
+}
+function initializeRosterImporter(){const btn=$('ownedimport'),input=$('ownedimportfiles');if(!btn||!input)return;btn.onclick=()=>input.click();input.onchange=()=>{if(input.files?.length)rosterImportFiles(input.files);input.value='';};}

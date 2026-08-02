@@ -1,0 +1,26 @@
+{
+  "appVersion": "3.6.0",
+  "rosterImporterVersion": "1.0.0",
+  "originalThreeScreenshots": {
+    "reviewRows": 31,
+    "resolvedIdentities": 31,
+    "completeProgressionRows": 31,
+    "ownedAfterApply": 31,
+    "pageErrors": 0,
+    "passed": true
+  },
+  "mixedRarityScreenshot": {
+    "reviewRows": 18,
+    "resolvedIdentities": 18,
+    "needsProgressionReview": 6,
+    "passed": true
+  },
+  "independentValidationPair": {
+    "reviewRows": 36,
+    "resolvedIdentities": 36,
+    "needsProgressionReview": 12,
+    "passed": true
+  },
+  "searchWorkerByteIdenticalToV3_5_0": true,
+  "searchWorkerSha256": "755d2b1e0c7f969c7b581e5c7e4593fbac9566ced848b53f6e00b74f2f289c34"
+}

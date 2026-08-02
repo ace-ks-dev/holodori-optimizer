@@ -1,0 +1,13 @@
+{
+  "version": "3.7.3",
+  "scope": "UI micro-fix",
+  "checks": {
+    "cardPoolActiveStateUsesDataPool": true,
+    "resultFooterHighestIntrinsicStatCategory": true,
+    "resultFooterKeepsLevel": true,
+    "resultFooterKeepsBloom": true,
+    "resultFooterRemovesRedundantAttributeText": true,
+    "scoringWorkerChanged": false,
+    "rosterRecognizerChanged": false
+  }
+}

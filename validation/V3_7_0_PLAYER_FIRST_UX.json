@@ -1,0 +1,52 @@
+{
+  "appVersion": "3.7.0",
+  "scoringModelVersion": "PFC-v3.5.0",
+  "rosterImporterVersion": "1.0.1",
+  "searchWorkerSha256": "5e7fc411fc8066a3f2b2711820595aefe07acbc80e8c599e9866172ad77a377b",
+  "searchWorkerBaselineV361Sha256": "755d2b1e0c7f969c7b581e5c7e4593fbac9566ced848b53f6e00b74f2f289c34",
+  "scoreEquationChange": false,
+  "uxSmoke": {
+    "bestRoster": {
+      "results": 5,
+      "passed": true
+    },
+    "oshiMustInclude": {
+      "passed": true
+    },
+    "oshiOutfitOwnerMatchesOshi": {
+      "passed": true
+    },
+    "oshiPreferWithin2PctMode": {
+      "passed": true
+    },
+    "specificOshiCard": {
+      "passed": true
+    },
+    "pageErrors": 0
+  },
+  "screenshotImporter": {
+    "fixture": "image(43).png",
+    "reviewRows": 18,
+    "maxLevelDefault": true,
+    "appliedSummary": "18 cards \u00b7 18 Holomems",
+    "passed": true
+  },
+  "responsive": {
+    "viewports": [
+      "1440x1000",
+      "1024x768",
+      "760x900",
+      "390x844"
+    ],
+    "homeHorizontalOverflow": false,
+    "mobileResultsHorizontalDocumentOverflow": false,
+    "teamLineupScrollsWithinCard": true,
+    "passed": true
+  },
+  "artworkLoading": {
+    "longAltTextInsidePortrait": false,
+    "skeletonPlaceholder": true,
+    "preloadLeadingTeams": 3
+  },
+  "recognizerChangedFromV361": false
+}

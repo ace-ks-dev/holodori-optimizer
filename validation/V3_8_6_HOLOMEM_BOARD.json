@@ -1,0 +1,59 @@
+{
+  "release": "3.8.6",
+  "feature": "Holomem Board Frequency Up node optimization",
+  "mechanic": {
+    "nodes_per_card": [0, 1, 2, 3],
+    "interval_multiplier": [1.0, 0.96, 0.92, 0.88],
+    "optimizer_budget_range": [0, 12],
+    "leader_rule": "Holomem whose Outfit is used is ineligible for Member-board Frequency Up"
+  },
+  "qc": {
+    "board_off_v385_regression": {
+      "status": "PASS",
+      "score_exact": true,
+      "team_exact": true,
+      "outfit_exact": true,
+      "reference_score": 380259.28757273004
+    },
+    "any_song_board_12": {
+      "status": "PASS",
+      "leader_nodes": 0,
+      "max_nodes_per_card": 3,
+      "browser_errors": 0
+    },
+    "choose_song_board_6": {
+      "status": "PASS",
+      "chart_timelines_loaded": 702,
+      "score": 385144.1401494978,
+      "allocation": [0, 2, 3, 0, 1],
+      "nodes_used": 6,
+      "leader_nodes": 0,
+      "max_nodes_per_card": 3,
+      "browser_errors": 0
+    },
+    "compare_interval_rule": {
+      "status": "PASS",
+      "base_interval": 17,
+      "materialized_intervals": [17, 16.32, 15.64, 14.96],
+      "ratios": [1.0, 0.96, 0.92, 0.88]
+    },
+    "best_next_card_board_6": {
+      "status": "PASS",
+      "browser_errors": 0,
+      "top_result_nodes_used": 6,
+      "max_nodes_per_card": 3
+    },
+    "fast_31_holomem_smoke": {
+      "status": "PASS",
+      "board_off_seconds": 1.1,
+      "board_optimize_seconds": 4.2,
+      "browser_errors": 0
+    },
+    "ui_segmented_control": {
+      "status": "PASS",
+      "off_active_after_optimize": false,
+      "optimize_active_after_optimize": true
+    }
+  },
+  "scope_caveat": "Only Frequency Up is modeled. Board allocation and Outfit selection are integrated into the existing bounded heuristic search; release output is best-found, not a formal global-optimality proof."
+}

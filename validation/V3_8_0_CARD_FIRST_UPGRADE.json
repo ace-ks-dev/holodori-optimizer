@@ -1,0 +1,36 @@
+{
+  "version": "3.8.0",
+  "date": "2026-08-02",
+  "status": "pass",
+  "changes": [
+    "Flat visual card Include / Exclude constraints under roster editor",
+    "Removed Holomem-level constraint UI and duplicate Advanced card-constraint UI",
+    "Result footer uses highest intrinsic stat + Level + full Bloom wording",
+    "Best next card marginal-team-impact calculator",
+    "Scalable all-candidate synergy screen + finalist optimizer refinement"
+  ],
+  "browserSmoke": {
+    "pageErrors": 0,
+    "ownedRosterCards": 20,
+    "directRequiredConstraint": true,
+    "includeExcludeMutualExclusion": true,
+    "requiredVisualCards": 20,
+    "normalFastSearchSeconds": 1.48,
+    "bestNextFastSeconds": 6.63,
+    "upgradeResultCount": 10,
+    "recommendedTeamUnownedCandidateCountsFirst3": [1, 1, 1],
+    "chartSongOptions": 177
+  },
+  "scaling": {
+    "owned31FiveStarBalancedSeconds": 18.0,
+    "owned31AllCardsFastSeconds": 10.6,
+    "allCardsPreOptimization": "previous per-candidate full search exceeded 360 seconds and was replaced"
+  },
+  "positiveImpactFixture": {
+    "ownedCards": 12,
+    "baseline": 413269,
+    "recommendedCard": "Ouro Kronii",
+    "resultScore": 413404.46933873784,
+    "displayedGain": "+0.03%"
+  }
+}
