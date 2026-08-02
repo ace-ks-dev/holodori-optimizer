@@ -1,0 +1,116 @@
+{
+  "version": "3.8.16",
+  "recognizerVersion": "1.0.6",
+  "importerVersion": "1.0.6",
+  "feature": "partial-card filtering and streamlined screenshot-import review",
+  "changes": [
+    "severe screen-edge fragments skipped before OCR/identity",
+    "inferred occluded slots retained only when identity resolves confidently",
+    "ready cards collapsed by default; only uncertain cards shown under Needs attention",
+    "partial-card skips reported separately from recognition uncertainty"
+  ],
+  "status": "PASS",
+  "browserRegression": {
+    "reported_image3": {
+      "keptCards": 10,
+      "resolved": 10,
+      "partialSkipped": 7,
+      "needsIdentityReview": 0,
+      "needsProgressionReview": 0,
+      "note": "two occluded top-row remnants plus five bottom-edge fragments skipped; ten full cards retained"
+    },
+    "aspect_2048x989": {
+      "keptCards": 10,
+      "resolved": 10,
+      "partialSkipped": 5
+    },
+    "aspect_1746x1157": {
+      "keptCards": 15,
+      "resolved": 15,
+      "partialSkipped": 2
+    },
+    "aspect_1905x1310": {
+      "keptCards": 15,
+      "resolved": 15,
+      "partialSkipped": 0
+    },
+    "aspect_2048x862": {
+      "keptCards": 18,
+      "resolved": 18,
+      "partialSkipped": 0,
+      "note": "useful moderately clipped top row remains retained because identities resolve confidently"
+    },
+    "regloss_776x367": {
+      "keptCards": 3,
+      "resolved": 3,
+      "partialSkipped": 0,
+      "levels": [
+        20,
+        20,
+        20
+      ]
+    },
+    "regloss_1334x390": {
+      "keptCards": 3,
+      "resolved": 3,
+      "partialSkipped": 0,
+      "levels": [
+        20,
+        20,
+        20
+      ]
+    },
+    "previous_crop_1176x655": {
+      "keptCards": 10,
+      "resolved": 10,
+      "partialSkipped": 0,
+      "levels": [
+        40,
+        40,
+        32,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30
+      ]
+    },
+    "previous_crop_1219x655": {
+      "keptCards": 10,
+      "resolved": 10,
+      "partialSkipped": 0
+    }
+  },
+  "syntheticHardening": {
+    "crop_both_5pct": "15/15 resolved, Levels exact",
+    "crop_left_10pct": "15/15 resolved, Levels exact",
+    "crop_left_20pct": "15/15 resolved, Levels exact",
+    "crop_right_5pct": "15/15 resolved, Levels exact",
+    "crop_top_8pct": "15/15 resolved, Levels exact",
+    "jpeg_q55": "15/15 resolved, Levels exact",
+    "jpeg_q75": "15/15 resolved, Levels exact"
+  },
+  "integratedUiQc": {
+    "image3_default": {
+      "ready": 10,
+      "attention": 0,
+      "partialSkipped": 7,
+      "readyDetailsCollapsed": true,
+      "primaryAction": "Add 10 cards",
+      "applyClosesModal": true,
+      "returnsToBestTeam": true,
+      "pageErrors": 0
+    },
+    "mixedRarity_manualLevels": {
+      "defaultReady": 18,
+      "afterDisablingMaxLevelReady": 12,
+      "attention": 6,
+      "attentionReason": "Level was not clear enough to read",
+      "partialApplyKeepsAttentionOpen": true,
+      "alreadyAddedRowsRemoved": true,
+      "pageErrors": 0
+    }
+  }
+}

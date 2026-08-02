@@ -6,13 +6,13 @@ A browser-based team optimizer for **hololive Dreams**. Import your roster from 
 
 ## Current release
 
-**v3.8.15**
+**v3.8.16**
 
 The easiest way to use the optimizer is to download the release package, keep the HTML and chart-data file together, and open the HTML in a modern desktop browser.
 
 If you are using this repository directly:
 
-1. Open `dist/Holodori_Optimizer_v3.8.15.html`.
+1. Open `dist/Holodori_Optimizer_v3.8.16.html`.
 2. Keep `dist/Holodori_Chart_Data_r51.js` in the same folder if you want **Choose a song** scoring.
 3. Import roster screenshots or edit your roster manually.
 
@@ -24,7 +24,7 @@ No server, npm install, account, or build step is required for normal use.
 - **Build around my oshi** — requires an exact selected oshi card while optimizing the rest of the team.
 - **Best next card** — tests unowned **5★** acquisition candidates and estimates which one improves your roster most, either for any team or for a team containing your selected oshi.
 - **Compare teams** — compares two manually configured teams using the same scoring terminology and model.
-- **Roster screenshot import** — recognizes current 3★–5★ cards, Level, and Bloom from supported desktop/mobile roster screenshots, with a review step before applying changes.
+- **Roster screenshot import** — recognizes current 3★–5★ cards, Level, and Bloom from supported desktop/mobile roster screenshots, with a quick attention check only when something is genuinely uncertain.
 - **Any song / Choose a song** — uses either the calibrated average-chart model or a bundled validated Perfect-FC chart timeline.
 - **Holomem Board** — can optimize the currently modeled **Frequency Up** nodes in 0–3-node allocations per eligible Member, using a shared 0–12-node budget. Other Board effects are intentionally not modeled yet.
 
@@ -45,7 +45,7 @@ See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and the validation records for 
 
 ## Roster recognition
 
-Roster recognition runs locally in the browser in a Web Worker. The current embedded registry covers **167 cards** across 3★, 4★, and 5★ rarities. Overlapping screenshots are deduplicated, and unresolved rows are held for review rather than silently applied.
+Roster recognition runs locally in the browser in a Web Worker. The current embedded registry covers **167 cards** across 3★, 4★, and 5★ rarities. Overlapping screenshots are deduplicated. Obvious edge fragments are skipped automatically, while genuinely uncertain usable cards are held for a quick check rather than silently applied.
 
 The recognizer is validated on the desktop and mobile layouts included in the project's regression set, but no computer-vision importer can guarantee every future UI layout, severe crop, compression level, or newly released card without an updated reference registry.
 
@@ -67,7 +67,7 @@ The repository includes a root `index.html` that opens the current build in `dis
 The project deliberately avoids a JavaScript build ecosystem. The release HTML is generated with Python's standard library:
 
 ```bash
-python build.py dist/Holodori_Optimizer_v3.8.15.html
+python build.py dist/Holodori_Optimizer_v3.8.16.html
 ```
 
 The build is deterministic. The expected SHA-256 for the current HTML is recorded in `RELEASE_TARGET_SHA256.txt`.

@@ -7,7 +7,7 @@ This directory is deliberately isolated from optimizer scoring/search.
 - `references.json` — compact generated visual index (dense-rgb-v1).
 - `digit_templates.json` — Level/Bloom glyph templates.
 
-`src/roster_importer.js.in` is the adapter between this worker and the existing Owned Cards store.
+`src/roster_importer.js.in` is the adapter between this worker and the existing Owned Cards store. Severe screen-edge fragments are filtered before recognition; inferred/occluded slots that still resolve confidently are retained, while unresolved remnants are skipped rather than promoted to user review.
 
 ## Future card refresh
 
