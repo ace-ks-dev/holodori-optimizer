@@ -1,7 +1,7 @@
 from pathlib import Path
 import json,sys
 ROOT=Path(__file__).resolve().parent; SRC=ROOT/'src'; RR=SRC/'roster_recognizer'
-out=Path(sys.argv[1]) if len(sys.argv)>1 else ROOT/'dist'/'Holodori_Optimizer_v3.8.16.html'
+out=Path(sys.argv[1]) if len(sys.argv)>1 else ROOT/'dist'/'Holodori_Optimizer_v3.8.17.html'
 template=(SRC/'template.html').read_text(encoding='utf-8'); styles=(SRC/'styles.css').read_text(encoding='utf-8'); app=(SRC/'app.js.in').read_text(encoding='utf-8'); search_worker=(SRC/'search_worker.js').read_text(encoding='utf-8'); importer=(SRC/'roster_importer.js.in').read_text(encoding='utf-8')
 app=app.replace('__WORKER_TEMPLATE_JSON__',json.dumps(search_worker,separators=(',',':')))
 repls={

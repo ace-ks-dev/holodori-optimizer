@@ -213,9 +213,12 @@ function passiveRecipients(ids,sourceIndex,pa,out=RECIPIENT_BUF){
   if(!triggerSatisfied(pa.trigger,ids))return 0;
   if(pa.target.kind==='self'){out[0]=sourceIndex;return 1;}
   let n=0;for(let i=0;i<5;i++)if(targetEligible(CARDS[ids[i]],pa.target))out[n++]=i;
-  const count=pa.target.count||n;if(n<count)return 0;
+  // target.count is a maximum recipient count, not an activation prerequisite.
+  // Any true prerequisite is carried separately by pa.trigger from the game data.
+  // Eligible targets are prioritized by current unbuffed stat total, then left-to-right.
+  const count=pa.target.count||n;
   for(let i=1;i<n;i++){const v=out[i],vt=CARDS[ids[v]].total;let j=i-1;while(j>=0){const u=out[j],ut=CARDS[ids[u]].total;if(ut>vt||(ut===vt&&u<v))break;out[j+1]=u;j--;}out[j+1]=v;}
-  return count;
+  return Math.min(n,count);
 }
 function evaluateOrderGenericBase(ids,counts,params,withDetails=false,compareOutfits=false){
   const perf=new Float64Array(5),tech=new Float64Array(5),sense=new Float64Array(5),all=new Float64Array(5),support=new Float64Array(5);

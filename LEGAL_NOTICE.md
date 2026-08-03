@@ -1,6 +1,6 @@
 # Holodori Team Optimizer — Disclaimers & Attribution
 
-**Version 3.8.16 — 2 August 2026**
+**Version 3.8.17 — 3 August 2026**
 
 This notice is intended to make the project's unofficial status, third-party-content use, network/build behavior, attribution, and limitations clear. It is not legal advice and does not create permission where permission is otherwise required.
 

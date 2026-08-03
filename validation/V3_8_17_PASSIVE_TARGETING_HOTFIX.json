@@ -1,0 +1,41 @@
+{
+  "appVersion": "3.8.17",
+  "baseVersion": "3.8.16",
+  "hotfix": "Passive targetCount / trigger separation",
+  "sourceVersion": "0b8b02c061dd6900cac86860443e3dfea22b8efe5ccc424b3b99a67821acc3be",
+  "bundledPassiveTriggerRowsCorrected": 182,
+  "bundledCardsWithCorrectedPassiveTriggers": 91,
+  "noPrerequisiteRowsPreviouslyFabricated": 136,
+  "explicitTriggerRowsWithWrongThresholdPreviously": 46,
+  "status": "passed",
+  "bundledPassiveRowsAuditedAgainstSameSourceCanonical": 334,
+  "workerRegression": {
+    "three": [
+      2,
+      [
+        2,
+        3
+      ]
+    ],
+    "one": [
+      1,
+      [
+        1
+      ]
+    ],
+    "gatedTwo": [
+      2,
+      [
+        2,
+        1
+      ]
+    ],
+    "gatedOne": 0
+  },
+  "javascriptSyntaxCheck": "passed",
+  "deterministicDoubleBuild": "passed",
+  "releaseHtmlSha256": "ad3865908131faf67a9aa78409ecf52cff1e8950ab61802b43aa2f2b13b0d914",
+  "chartCompanionSha256": "9815d0c64a97d39fd310e951313f790c58a7acdbaa2d61a3413414afdd301fcc",
+  "scope": "Minimal v3.8.16 hotfix only; no unreleased Board/UI architecture work included.",
+  "releaseNotesSha256": "bc69ff8a7ed2fea4fd2ae72e3ca366e5bbc7741c281b257ea6c7bfd976b46694"
+}

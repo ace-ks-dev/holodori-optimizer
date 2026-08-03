@@ -1,6 +1,6 @@
 {
-  "appVersion": "3.8.16",
-  "scoringModelVersion": "PFC-v3.5.0+board-frequency-v1",
+  "appVersion": "3.8.17",
+  "scoringModelVersion": "PFC-v3.5.0+board-frequency-v1+passive-targeting-v2",
   "cardDataSchemaVersion": "normalized-card-v2",
   "chartPackSchemaVersion": "packed-chart-v1",
   "chartAssetRevision": 51,
