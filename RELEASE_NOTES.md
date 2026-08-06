@@ -16,7 +16,7 @@ This is a diagnostics/UI payload fix. Projected scores and optimizer rankings ar
 
 ## Included data
 
-- Cards: **167**
+- Cards: **169**
 - Songs: **177**
 - Exact chart pack: **r51**
 - Chart metadata rows: **708**
@@ -25,4 +25,4 @@ This is a diagnostics/UI payload fix. Projected scores and optimizer rankings ar
 
 ## Integrity
 
-Standalone HTML SHA-256: `de5cc063ac01195328f7c82cd245628a5b29bd005ed7c4cddfabeb7a7f4b1bee`
+Standalone HTML SHA-256: `af579c6c8a719ee8a3a74539161e89cd596b4ec64f7801b550c5ed668c2162e2`

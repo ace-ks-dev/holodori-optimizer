@@ -3,11 +3,11 @@
   "canonicalDataVersion": "0b8b02c061dd",
   "chartVersion": "r51",
   "sourceMasterRevision": "0b8b02c061dd6900cac86860443e3dfea22b8efe5ccc424b3b99a67821acc3be",
-  "cards": 167,
+  "cards": 169,
   "songs": 177,
   "chartMetadataRows": 708,
   "exactTimelines": 702,
   "packedNoteEvents": 405194,
-  "htmlSha256": "de5cc063ac01195328f7c82cd245628a5b29bd005ed7c4cddfabeb7a7f4b1bee",
-  "canonicalDataPackVersion": "429d61a5eb3b079a2d0731fbc18fa62ca386af36cc6e54680313861600f087a2"
+  "htmlSha256": "af579c6c8a719ee8a3a74539161e89cd596b4ec64f7801b550c5ed668c2162e2",
+  "canonicalDataPackVersion": "1fe43bbe4fdbc6b7af85e293fbd5404e04e2af4917eb584488ab11246e0614bb"
 }
