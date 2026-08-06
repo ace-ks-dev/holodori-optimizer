@@ -1,9 +1,0 @@
-{
-  "appVersion": "3.7.2",
-  "scope": "visual card renderer only",
-  "restoredFrom": "v3.6.1 src/app.js.in cardArtHtml + base card CSS",
-  "syntheticOverlaysRemoved": true,
-  "scoringChanged": false,
-  "recognizerChanged": false,
-  "uxControlsChanged": false
-}
