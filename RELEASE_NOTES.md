@@ -17,12 +17,12 @@ This is a diagnostics/UI payload fix. Projected scores and optimizer rankings ar
 ## Included data
 
 - Cards: **169**
-- Songs: **177**
-- Exact chart pack: **r51**
-- Chart metadata rows: **708**
-- Exact timelines: **702**
-- Packed note events: **405,194**
+- Songs: **182**
+- Exact chart pack: **r53**
+- Chart metadata rows: **728**
+- Exact timelines: **722**
+- Packed note events: **416,423**
 
 ## Integrity
 
-Standalone HTML SHA-256: `af579c6c8a719ee8a3a74539161e89cd596b4ec64f7801b550c5ed668c2162e2`
+Standalone HTML SHA-256: `f3e61608a9aa2abf19c22e2b49d0aef6dc486c3ae150ef1031f57e512edf8120`
