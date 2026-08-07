@@ -1,12 +1,18 @@
-# Holodori Optimizer v3.14.0-beta.17 — Passive Target/Trigger Correction
+# Holodori Optimizer v3.14.0-beta.22
 
-This release corrects canonical passive mechanics while retaining the beta.16 Comparison-import and Bloom batch controls.
+## Skill timeline readability
 
-## Fixed
+- Replaced the long Skill timing & value paragraph with a compact four-item legend shared verbatim by Optimizer and Compare.
+- The legend keeps the important mappings visible: position/width = timing, brighter = stronger Effective Active Score UP, the shared Special lane contains five fixed party-order windows, SAR raises normal Active proc chance inside its fixed Special window, and bottom bars represent Expected Active value.
+- Full score-term definitions remain available in the existing expandable glossary instead of being duplicated above the chart.
 
-- Passive target recipient limits are no longer treated as implicit activation prerequisites.
-- Only an explicit master-data `liveSkillTriggerGroupId` creates a passive composition trigger.
-- The checked-in roster was audited and repaired: 68 cards / 136 passive levels lost fake triggers; genuine explicit triggers remain intact.
+## Default Outfit artwork
+
+- Fixed synthetic Default Outfit entries rendering initials in Compare/Outfit previews because their synthetic IDs do not exist in the local artwork manifest.
+- Default Outfits now resolve their representative bundled portrait through `displayCardId`.
+- Representative Default Outfit portraits suppress rarity/attribute/group chrome so the art identifies the member without implying the Default Outfit has the representative card's rarity or attribute.
+
+Scoring, search, Board, chart, and canonical mechanics are unchanged from beta.21.
 
 ## Included data
 
@@ -19,4 +25,4 @@ This release corrects canonical passive mechanics while retaining the beta.16 Co
 
 ## Integrity
 
-Standalone HTML SHA-256: `0840bc4606a363f872d04c7db34d817006eb806cc7b3aa5233dfb625af4c78ea`
+Standalone HTML SHA-256: `6298eac6669f543f6980c2b97a8fbab235a8c3107fd1909b58e561c2a4eb42a3`

@@ -1,5 +1,5 @@
 {
-  "applicationVersion": "3.14.0-beta.17",
+  "applicationVersion": "3.14.0-beta.22",
   "canonicalDataVersion": "2026.08.07.1",
   "chartVersion": "r53",
   "sourceMasterRevision": "97f9d1d7728c1dfc790ea441f3ed1fb6566199f721d0f5e8676397ba28ffab48",
@@ -8,6 +8,6 @@
   "chartMetadataRows": 728,
   "exactTimelines": 722,
   "packedNoteEvents": 416423,
-  "htmlSha256": "0840bc4606a363f872d04c7db34d817006eb806cc7b3aa5233dfb625af4c78ea",
+  "htmlSha256": "6298eac6669f543f6980c2b97a8fbab235a8c3107fd1909b58e561c2a4eb42a3",
   "canonicalDataPackVersion": "be09eae9211ac9e2d718a038cf4a01137d22a0ee8507dfe1ca18888036a1c287"
 }
