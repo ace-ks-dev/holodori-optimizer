@@ -1,6 +1,6 @@
 # Holodori Optimizer
 
-**Application 3.14.0-beta.22 · Data 2026.08.07.1 · Exact charts r53**
+**Application 3.14.0-beta.23 · Data 2026.08.07.1 · Exact charts r53**
 
 Standalone, offline-capable Hololive Dreams team optimizer.
 

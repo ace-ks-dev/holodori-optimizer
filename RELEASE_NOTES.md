@@ -1,18 +1,22 @@
-# Holodori Optimizer v3.14.0-beta.22
+# Holodori Optimizer v3.14.0-beta.23
 
-## Skill timeline readability
+## Difficulty-calibrated Any song
 
-- Replaced the long Skill timing & value paragraph with a compact four-item legend shared verbatim by Optimizer and Compare.
-- The legend keeps the important mappings visible: position/width = timing, brighter = stronger Effective Active Score UP, the shared Special lane contains five fixed party-order windows, SAR raises normal Active proc chance inside its fixed Special window, and bottom bars represent Expected Active value.
-- Full score-term definitions remain available in the existing expandable glossary instead of being duplicated above the chart.
+- **Any song now asks for Easy / Normal / Hard / Expert.** The selected difficulty uses its own six weighted scenarios instead of pooling all four difficulty populations together.
+- The current r53 calibration is derived from **722 exact Perfect-FC timelines**: 180 Easy, 180 Normal, 181 Hard, and 181 Expert.
+- Optimizer results retain their Any-song difficulty, and loading a result into Compare carries that calibration context with the team.
+- The chosen Any-song difficulty is remembered locally after selection.
 
-## Default Outfit artwork
+## Maintenance hardening
 
-- Fixed synthetic Default Outfit entries rendering initials in Compare/Outfit previews because their synthetic IDs do not exist in the local artwork manifest.
-- Default Outfits now resolve their representative bundled portrait through `displayCardId`.
-- Representative Default Outfit portraits suppress rarity/attribute/group chrome so the art identifies the member without implying the Default Outfit has the representative card's rarity or attribute.
+- Added a deterministic Any-song scenario generator derived from the active protected chart pack and canonical chart metadata.
+- Chart promotion now regenerates the calibration automatically.
+- Gated public builds regenerate against the exact chart population that is actually published, preventing embargoed/current-only charts from leaking into generic scoring.
+- Static maintenance gates reject stale scenario revisions, timeline counts, difficulty sets, or malformed 6-scenario / 2-screening payloads.
 
-Scoring, search, Board, chart, and canonical mechanics are unchanged from beta.21.
+## Protected mechanics
+
+The protected scorer/search worker, roster importer, roster recognizer worker, Holomem Board mechanics, and canonical card mechanics are unchanged from beta.22. Any-song team scores and rankings can legitimately differ because the existing scorer now receives difficulty-appropriate chart-duration, note-count, combo, and coefficient scenarios.
 
 ## Included data
 
@@ -25,4 +29,4 @@ Scoring, search, Board, chart, and canonical mechanics are unchanged from beta.2
 
 ## Integrity
 
-Standalone HTML SHA-256: `6298eac6669f543f6980c2b97a8fbab235a8c3107fd1909b58e561c2a4eb42a3`
+Standalone HTML SHA-256: `6083b50dcb9772e3b70cf2460da73d2ac0288ba711b15de77509bd2f448dca8e`
