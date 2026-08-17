@@ -20,13 +20,13 @@ The protected scorer/search worker, roster importer, roster recognizer worker, H
 
 ## Included data
 
-- Cards: **169**
-- Songs: **182**
-- Exact chart pack: **r53**
-- Chart metadata rows: **728**
-- Exact timelines: **722**
-- Packed note events: **416,423**
+- Cards: **174**
+- Songs: **188**
+- Exact chart pack: **r54**
+- Chart metadata rows: **752**
+- Exact timelines: **746**
+- Packed note events: **429,554**
 
 ## Integrity
 
-Standalone HTML SHA-256: `6083b50dcb9772e3b70cf2460da73d2ac0288ba711b15de77509bd2f448dca8e`
+Standalone HTML SHA-256: `5aa6b8c18014eb0fc3bc4ba5ad6cba4e881f1dc368237bc7d10e5dc32e6c7826`

@@ -1,13 +1,13 @@
 {
   "applicationVersion": "3.14.0-beta.23",
-  "canonicalDataVersion": "2026.08.07.1",
-  "chartVersion": "r53",
-  "sourceMasterRevision": "97f9d1d7728c1dfc790ea441f3ed1fb6566199f721d0f5e8676397ba28ffab48",
-  "cards": 169,
-  "songs": 182,
-  "chartMetadataRows": 728,
-  "exactTimelines": 722,
-  "packedNoteEvents": 416423,
-  "htmlSha256": "6083b50dcb9772e3b70cf2460da73d2ac0288ba711b15de77509bd2f448dca8e",
-  "canonicalDataPackVersion": "be09eae9211ac9e2d718a038cf4a01137d22a0ee8507dfe1ca18888036a1c287"
+  "canonicalDataVersion": "2026.08.17.2",
+  "chartVersion": "r54",
+  "sourceMasterRevision": "71e11fbd082eec83d10cff35da7179cbaf319097f0021aa5747fe5a5392b549c",
+  "cards": 174,
+  "songs": 188,
+  "chartMetadataRows": 752,
+  "exactTimelines": 746,
+  "packedNoteEvents": 429554,
+  "htmlSha256": "5aa6b8c18014eb0fc3bc4ba5ad6cba4e881f1dc368237bc7d10e5dc32e6c7826",
+  "canonicalDataPackVersion": "0a36a2c85e664a83e2080d912d4a4689b5a465704bd03cc9b73374ba9cc6ee23"
 }
